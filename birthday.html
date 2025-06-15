@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Happy Birthday, Eman!</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #ffe6f0;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .bubble-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .bubble {
+      position: absolute;
+      bottom: -50px;
+      border-radius: 50%;
+      opacity: 0.6;
+      animation: rise 10s infinite ease-in;
+    }
+
+    .blue {
+      background-color: #add8e6;
+      width: 20px;
+      height: 20px;
+    }
+
+    .heart {
+      width: 20px;
+      height: 20px;
+      background: red;
+      transform: rotate(45deg);
+      animation: rise 12s infinite ease-in;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      width: 20px;
+      height: 20px;
+      background: red;
+      border-radius: 50%;
+      position: absolute;
+    }
+
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -10px;
+      top: 0;
+    }
+
+    @keyframes rise {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateY(-100vh) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    h1.typewriter {
+      font-size: 2em;
+      margin-top: 20px;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 2px solid rgba(0,0,0,0.75);
+      width: 0;
+      animation: typing 3s steps(40, end) forwards, blink-caret 0.75s step-end infinite;
+      z-index: 1;
+    }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+
+    @keyframes blink-caret {
+      from, to { border-color: transparent }
+      50% { border-color: rgba(0,0,0,0.75); }
+    }
+
+    .main-image {
+      width: 300px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px #ff99cc;
+      margin: 20px auto;
+      z-index: 1;
+    }
+
+    .final-message {
+      font-size: 1.2em;
+      padding: 0 20px;
+      max-width: 600px;
+      color: #222;
+      white-space: pre-line;
+      z-index: 1;
+    }
+
+    canvas#fireworks {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- 🎵 Background Birthday Music -->
+  <audio id="bdaySong" loop>
+    <source src="click.mp3" type="audio/mp3">
+  </audio>
+
+  <div class="bubble-container">
+    <div class="bubble blue"></div>
+    <div class="bubble blue"></div>
+    <div class="bubble blue"></div>
+    <div class="bubble blue"></div>
+    <div class="bubble blue"></div>
+    <div class="bubble heart"></div>
+    <div class="bubble heart"></div>
+    <div class="bubble heart"></div>
+  </div>
+
+  <h1 class="typewriter">🎉 Happy Birthday, Eman! 🎉</h1>
+
+  <!-- 🎀 Image Path -->
+  <img src="girl-birthday.jpg" class="main-image" alt="Eman" />
+  <!-- ↑⤴ Replace with your local image if needed -->
+
+  <p id="typewriter-message" class="final-message"></p>
+
+  <canvas id="fireworks"></canvas>
+
+  <script>
+    // 💬 Typewriter message
+    const messageText = `📬 From miles away... I couldn’t send you a hug 🥺
+But I crafted this little world just for your smile 🌟✨
+May your dreams bloom 🌸 just as beautifully ❤️ as your heart does 🖤
+Because you’re magic 🌟 in human form, and your smile lights up galaxies 💫🌌
+
+Forever cheering for you from afar 🧃🧸
+— Your Distant Coder Friend 💻📩
+~ Mr. Shadow ♡`;
+
+    const messageEl = document.getElementById("typewriter-message");
+    let index = 0;
+    function typeMessage() {
+      if (index < messageText.length) {
+        const char = messageText.charAt(index);
+        messageEl.innerHTML += char === '\n' ? '<br>' : char;
+        index++;
+        setTimeout(typeMessage, 50);
+      }
+    }
+    setTimeout(typeMessage, 2500);
+
+    // 🎆 Fireworks
+    const canvas = document.getElementById("fireworks");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    function random(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    function Firework() {
+      this.x = random(0, canvas.width);
+      this.y = canvas.height;
+      this.targetY = random(100, canvas.height / 2);
+      this.radius = 2;
+      this.color = `hsl(${random(0, 360)}, 100%, 60%)`;
+      this.speed = random(4, 7);
+    }
+
+    Firework.prototype.update = function () {
+      this.y -= this.speed;
+    };
+
+    Firework.prototype.draw = function () {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+    };
+
+    let fireworks = [];
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (Math.random() < 0.1) fireworks.push(new Firework());
+      fireworks.forEach((fw, i) => {
+        fw.update();
+        fw.draw();
+        if (fw.y < fw.targetY) fireworks.splice(i, 1);
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    // 🎶 Play Music After Page Loads or Click
+    window.addEventListener('DOMContentLoaded', () => {
+      const song = document.getElementById("bdaySong");
+      if (song) {
+        song.play().catch(() => {
+          document.body.addEventListener("click", () => song.play(), { once: true });
+        });
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Surprise Awaits 🎁</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="index-body">
+  <div class="stars"></div>
+  <div class="twinkling"></div>
+
+  <div class="intro-box">
+    <h1 class="typewriter-intro">Hey Eman, something magical is waiting for you ✨</h1>
+    <div class="gift-box" onclick="openGift()"></div>
+  </div>
+
+  <script>
+    const intro = document.querySelector(".typewriter-intro");
+    const introText = intro.textContent;
+    intro.textContent = "";
+    let idx = 0;
+    function typeIntro() {
+      if (idx < introText.length) {
+        intro.textContent += introText.charAt(idx);
+        idx++;
+        setTimeout(typeIntro, 70);
+      }
+    }
+    typeIntro();
+
+    function openGift() {
+  document.querySelector(".gift-box").classList.add("open");
+  setTimeout(() => {
+    window.location.href = "birthday.html";
+  }, 1200); // Short delay for animation
+}
+  </script>
+<!-- ✅ Add THIS below existing script -->
+<script>
+  // Fireworks animation
+  const canvas = document.getElementById("fireworks");
+  const ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  function random(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  function Firework() {
+    this.x = random(0, canvas.width);
+    this.y = canvas.height;
+    this.targetY = random(100, canvas.height / 2);
+    this.radius = 2;
+    this.color = `hsl(${random(0, 360)}, 100%, 60%)`;
+    this.speed = random(4, 7);
+  }
+
+  Firework.prototype.update = function () {
+    this.y -= this.speed;
+  };
+
+  Firework.prototype.draw = function () {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fillStyle = this.color;
+    ctx.fill();
+  };
+
+  let fireworks = [];
+  function animateFireworks() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (Math.random() < 0.1) fireworks.push(new Firework());
+    fireworks.forEach((fw, i) => {
+      fw.update();
+      fw.draw();
+      if (fw.y < fw.targetY) fireworks.splice(i, 1);
+    });
+    requestAnimationFrame(animateFireworks);
+  }
+  animateFireworks();
+</script>
+
+<!-- ✅ Make sure canvas exists -->
+<canvas id="fireworks"></canvas>
+
+
+</body>
+</html>
