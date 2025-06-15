@@ -132,7 +132,7 @@
 <body>
   <!-- 🎵 Background Birthday Music -->
   <audio id="bdaySong" loop>
-    <source src="click.mp3" type="audio/mp3">
+    <source src="music.mp3" type="audio/mp3">
   </audio>
 
   <div class="bubble-container">
@@ -225,10 +225,10 @@ Forever cheering for you from afar 🧃🧸
     // 🎶 Play Music After Page Loads or Click
     window.addEventListener('DOMContentLoaded', () => {
       const song = document.getElementById("bdaySong");
-      if (song) {
-        song.play().catch(() => {
-          document.body.addEventListener("click", () => song.play(), { once: true });
-        });
+      if (song) {song.play().catch(() => {
+  document.body.addEventListener("click", () => song.play(), { once: true });
+});
+
       }
     });
   </script>
